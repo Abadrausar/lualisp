@@ -23,7 +23,8 @@ function Env:lookup(symbol)
    return nil
 end
 
--- Add a new key or change an existing one in the most local scope
+-- Add a new key or change an existing one in the most
+-- local scope
 function Env:add(key, value)
    self.scopes[self.scopeCount][key] = value
    return self.scopes[self.scopeCount][key]
@@ -32,7 +33,8 @@ end
 -- Create a string representation of the environment
 function Env:tostring()
    local str = {}
-   table.insert(str, "Environment[scopeCount=" .. self.scopeCount .. "\n")
+   table.insert(str, "Environment[scopeCount=" ..
+		self.scopeCount .. "\n")
    for _, scope in ipairs(self.scopes) do
       table.insert(str, "Scope[")
       for key, value in pairs(scope) do
@@ -68,8 +70,9 @@ function Env:addLocalScope(localScope)
       table.insert(newScopes, scope)
    end
    table.insert(newScopes, localScope)
-   local newEnv = { scopeCount = self.scopeCount + 1, scopes = newScopes,
-       add = Env.add, addBindings = Env.addBindins,
+   local newEnv = { scopeCount = self.scopeCount + 1,
+      scopes = newScopes,
+      add = Env.add, addBindings = Env.addBindins,
       addLocalScope=Env.addLocalScope }
     setmetatable(newEnv, Env.mt)
     return newEnv
@@ -83,8 +86,11 @@ Env.mt = {
 
 function Env.new(initialScope)
    -- The scopes are stored from most global to most local
-   local env =  { scopeCount = 1, scopes = {initialScope}, add = Env.add,
-   addBindings = Env.addBindings, addLocalScope = Env.addLocalScope, lookup=Env.lookup }
+   local env =  { scopeCount = 1, scopes = {initialScope},
+      add = Env.add,
+      addBindings = Env.addBindings,
+      addLocalScope = Env.addLocalScope,
+      lookup=Env.lookup }
    setmetatable(env, Env.mt)
    return env
 end

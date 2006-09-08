@@ -72,8 +72,9 @@ function Lisp.evalSexpr(env, sexpr)
 	    error("The S-expr did not evaluate to a function: " ..
 		  tostring(car))
 	 end
-	 -- The function can be eithe "lazy", in that it deals with
-	 -- evaluation of its arguments itself, a "macro", which requires
+	 -- The function can be eithe "lazy", in that it deals
+	 -- with evaluation of its arguments itself, a "macro",
+	 -- which requires
 	 -- a second evaluation after the macro expansion, or
 	 -- a regular eager one
 
@@ -160,10 +161,14 @@ function Lisp.prim_lambda(env, args)
    local body = args.cdr.car
    return Sexpr.newFun("(lambda " ..
 		       Sexpr.prettyPrint(formalParams) ..
-			  " " .. Sexpr.prettyPrint(body) .. ")",
+			  " " .. Sexpr.prettyPrint(body)
+			  .. ")",
 		       function(env2, actualParams)
-			  local localEnv = env:addBindings(formalParams, actualParams)
-			  return Lisp.evalSexpr(localEnv, body)
+			  local localEnv =
+			     env:addBindings(formalParams,
+					     actualParams)
+			  return Lisp.evalSexpr(localEnv,
+						body)
 		       end)
 end
 
@@ -187,7 +192,8 @@ function Lisp.prim_eq(env, args)
 end
 
 function Lisp.prim_lt(env, args)
-   return Sexpr.newBool(args.car.lexeme+0 < args.cdr.car.lexeme+0)
+   return Sexpr.newBool(args.car.lexeme+0 <
+			args.cdr.car.lexeme+0)
 end
 
 function Lisp.prim_consp(env, args)
@@ -268,7 +274,8 @@ function Lisp.getPrimitiveScope()
       eval = Sexpr.newFun("eval", Lisp.prim_eval),
       load = Sexpr.newFun("load", Lisp.prim_load),
       echo = Sexpr.newFun("echo", Lisp.prim_echo),
-      defmacro = Sexpr.newFun("defmacro", Lisp.prim_defmacro, "lazy"),
+      defmacro = Sexpr.newFun("defmacro", Lisp.prim_defmacro,
+			      "lazy"),
       ["if"] = Sexpr.newFun("if", Lisp.prim_if, "lazy")
    }
 end

@@ -10,8 +10,8 @@
 require "Sexpr"
 
 Parser = {
-   operators = { ["("] = true, [")"] = true, [","] = true, ["'"] = true,
-      ["`"] = true, ["."] = true }
+   operators = { ["("] = true, [")"] = true, [","] = true,
+      ["'"] = true, ["`"] = true, ["."] = true }
 }
 
 -- Parse the code snippet, yielding a list of (unevaluated) S-expr
@@ -46,7 +46,8 @@ function Parser.createSexpr(tokens, start)
 end
 
 function Parser.createCons(tokens, start)   
-   -- If the first token is a '.', we just return the second token, as is,
+   -- If the first token is a '.', we just return the second token,
+   -- as is,
    -- while skipping a subsequent ')',
    -- else if it is a ')' we return NIL, else
    -- we get the first Sexpr and CONS it with the rest
@@ -88,7 +89,8 @@ function Parser.parseTokens(expr)
       local c = string.sub(expr, i, i)
       -- We have seven (7) main cases:
       if isEscaping then
-	 -- 1. Escaping this character, whether in a string or not
+	 -- 1. Escaping this character, whether in a string
+	 -- or not
 	 --
 	 table.insert(currentToken, c)	    
 	 isEscaping = false
@@ -102,15 +104,18 @@ function Parser.parseTokens(expr)
 	 -- Two sub cases:
 	 if not inString then
 	    -- a. starting a new string
-	    -- If we already had a token, let us finish that up first
+	    -- If we already had a token, let us finish that
+	    -- up first
 	    if table.getn(currentToken) > 0 then
-	       table.insert(tokens, Sexpr.newAtom(table.concat(currentToken)))
+	       table.insert(tokens,
+			Sexpr.newAtom(table.concat(currentToken)))
 	    end
 	    currentToken = {}
 	    inString = true
 	 else
 	    -- b. ending a string
-	    table.insert(tokens, Sexpr.newString(table.concat(currentToken)))
+	    table.insert(tokens,
+		Sexpr.newString(table.concat(currentToken)))
 	    currentToken = {}
 	    inString = false
 	 end	
@@ -123,16 +128,18 @@ function Parser.parseTokens(expr)
 	 --
 	 -- We add any saved token
 	 if table.getn(currentToken) > 0 then
-	    table.insert(tokens, Sexpr.newAtom(table.concat(currentToken)))
+	    table.insert(tokens,
+		Sexpr.newAtom(table.concat(currentToken)))
 	    currentToken = {}
 	 end
 	 table.insert(tokens, Sexpr.newOperator(c))
       elseif string.find(c, "%s") then
-	 -- 6. A blank character, which should add the current token,
-	 -- if any
+	 -- 6. A blank character, which should add the current
+	 -- token, if any
 	 -- 
 	 if table.getn(currentToken) > 0 then
-	    table.insert(tokens, Sexpr.newAtom(table.concat(currentToken)))
+	    table.insert(tokens,
+		Sexpr.newAtom(table.concat(currentToken)))
 	    currentToken = {}
 	 end
       else

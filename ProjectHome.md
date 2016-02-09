@@ -1,0 +1,3 @@
+This is an interpreter for the Lisp family of languages, implemented in the language Lua, and integrating with Lua. This leverage the small footprint and embeddability of Lua to get a scripting environment for Lisp development. I.e., you can now control your application or game from the comfort seat of a Lisp developer.
+
+The code also serves as an example of a minimalistic - and rapid - implementation of the awkwardly powerful Lisp language.
